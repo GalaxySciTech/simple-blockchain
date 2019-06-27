@@ -14,7 +14,7 @@ func main() {
 	for{
 		newBlock,_:=core.GenerateBlock(blo)
 		fmt.Println(newBlock)
-		if(core.IsBlockValid(newBlock,blo)){
+		if core.IsBlockValid(newBlock,blo) {
 			blo=newBlock
 
 		}else {
