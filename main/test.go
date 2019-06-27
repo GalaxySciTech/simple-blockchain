@@ -14,7 +14,13 @@ func main() {
 	for{
 		newBlock,_:=core.GenerateBlock(blo)
 		fmt.Println(newBlock)
-		blo=newBlock
+		if(core.IsBlockValid(newBlock,blo)){
+			blo=newBlock
+
+		}else {
+			fmt.Println("block generate failed reason: new block verification failed ")
+			return
+		}
 		time.Sleep(time.Second)
 	}
 
