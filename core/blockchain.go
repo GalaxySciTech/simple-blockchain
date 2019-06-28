@@ -52,3 +52,7 @@ func ReplaceChain(newBlocks []Block) {
 		BlockChain = newBlocks
 	}
 }
+
+func GetBlockInfo() []Block{
+	return BlockChain
+}
