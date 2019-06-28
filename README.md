@@ -7,4 +7,5 @@
 
 -----------
 ###### *you can execute the command*：
-     go run main/test.go 
+     go run main.go
+     http://127.0.0.1:10023/get_block_chain 

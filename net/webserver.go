@@ -32,7 +32,7 @@ func Start() error{
 // create handlers
 func makeMuxRouter() http.Handler {
 	muxRouter := mux.NewRouter()
-	muxRouter.HandleFunc("/",handleGetBlockchain).Methods("GET")
+	muxRouter.HandleFunc("/get_block_chain",handleGetBlockchain).Methods("GET")
 	//muxRouter.HandleFunc("/", handleWriteBlock).Methods("POST")
 	return muxRouter
 }
