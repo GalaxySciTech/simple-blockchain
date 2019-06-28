@@ -7,21 +7,23 @@ import (
 )
 
 func main() {
-	blo := core.Block{Index: 1, Timestamp: time.Now().String(), PrevHash: "3c5101b64f2d810b579159de73c40ec40124b05f01a31053e8b8d2618ffc56b3"}
-	hash:= core.CalculateHash(blo)
-	blo.Hash=hash
-	fmt.Println(blo)
-	for{
-		newBlock,_:=core.GenerateBlock(blo)
-		fmt.Println(newBlock)
-		if core.IsBlockValid(newBlock,blo) {
-			blo=newBlock
-
-		}else {
-			fmt.Println("block generate failed reason: new block verification failed ")
-			return
+	genesisBlock := core.Block{Index: 0, Timestamp: time.Now().String(), PrevHash: ""}
+	hash:= core.CalculateHash(genesisBlock)
+	genesisBlock.Hash=hash
+	blo:=genesisBlock
+	core.BlockChain = append(core.BlockChain, genesisBlock)
+	go func() {
+		for{
+			newBlock,_:=core.GenerateBlock(blo)
+			if core.IsBlockValid(newBlock,blo) {
+				blo=newBlock
+				core.BlockChain= append(core.BlockChain, blo)
+			}else {
+				fmt.Println("block generate failed reason: new block verification failed ")
+				return
+			}
+			time.Sleep(time.Second)
 		}
-		time.Sleep(time.Second)
-	}
+	}()
 
 }
