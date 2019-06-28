@@ -13,7 +13,12 @@ type Block struct {
 	PrevHash  string
 }
 
-var BlockChain []Block
+type BlockChain struct {
+	Blocks []Block
+}
+
+var Bc BlockChain
+
 
 func CalculateHash(block Block) string {
 	record := string(block.Index) + block.Timestamp + block.PrevHash
@@ -48,11 +53,11 @@ func IsBlockValid(newBlock, oldBlock Block) bool {
 }
 
 func ReplaceChain(newBlocks []Block) {
-	if len(newBlocks) > len(BlockChain) {
-		BlockChain = newBlocks
+	if len(newBlocks) > len(Bc.Blocks) {
+		Bc.Blocks = newBlocks
 	}
 }
 
 func GetBlockInfo() []Block{
-	return BlockChain
+	return Bc.Blocks
 }

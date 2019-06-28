@@ -18,13 +18,13 @@ func main() {
 	hash := core.CalculateHash(genesisBlock)
 	genesisBlock.Hash = hash
 	blo := genesisBlock
-	core.BlockChain = append(core.BlockChain, genesisBlock)
+	core.Bc.Blocks = append(core.Bc.Blocks, genesisBlock)
 	go func() {
 		for {
 			newBlock, _ := core.GenerateBlock(blo)
 			if core.IsBlockValid(newBlock, blo) {
 				blo = newBlock
-				core.BlockChain = append(core.BlockChain, blo)
+				core.Bc.Blocks = append(core.Bc.Blocks, blo)
 				log.Println("generate new block ",newBlock)
 			} else {
 				log.Println("block generate failed reason: new block verification failed ")
