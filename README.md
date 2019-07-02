@@ -10,6 +10,6 @@
 ###### *you can execute the command*：
      go run main.go
      
-     $ curl localhost:1234/jsonrpc -X POST \
+     $ curl http://127.0.0.1:10023/jsonrpc -X POST \
          --data '{"method":"Pie.GetBlockChainInfo","params":[],"id":1}'
 
