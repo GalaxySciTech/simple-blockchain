@@ -1,7 +1,6 @@
 package net
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"net/rpc"
@@ -13,10 +12,8 @@ import (
 type Pie struct {
 }
 
-func (pie *Pie) GetBlockChainInfo(arg string, reply *string) error {
-	block := core.Bc
-	jsonBytes, _ := json.Marshal(block)
-	*reply = string(jsonBytes)
+func (pie *Pie) GetBlockChainInfo(arg string, reply *core.BlockChain) error {
+	*reply = *core.Bc
 	return nil
 }
 
@@ -25,6 +22,7 @@ func Start() {
 	rpc.RegisterName("Pie", new(Pie))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type","application/json")
 		var conn io.ReadWriteCloser = struct {
 			io.Writer
 			io.ReadCloser
