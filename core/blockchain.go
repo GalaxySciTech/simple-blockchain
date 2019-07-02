@@ -1,63 +1,36 @@
 package core
 
-import (
-	"crypto/sha256"
-	"encoding/hex"
-	"time"
-)
+import "time"
 
-type Block struct {
-	Index     int
-	Timestamp string
-	Hash      string
-	PrevHash  string
-}
-
+// BlockChain 是一个 Block 指针数组
 type BlockChain struct {
-	Blocks []Block
+	Blocks []*Block
 }
 
-var Bc BlockChain
+var Bc *BlockChain
 
-
-func CalculateHash(block Block) string {
-	record := string(block.Index) + block.Timestamp + block.PrevHash
-	s := sha256.New()
-	s.Write([]byte(record))
-	hashed := s.Sum(nil)
-	return hex.EncodeToString(hashed)
+// NewBlockChain 创建一个有创世块的链
+func NewBlockChain() *BlockChain {
+	return &BlockChain{[]*Block{NewGenesisBlock()}}
 }
 
-func GenerateBlock(oldBlock Block) (Block, error) {
-	var newBlock Block
-	t := time.Now()
-	newBlock.Index = oldBlock.Index + 1
-	newBlock.Timestamp = t.String()
-	newBlock.PrevHash = oldBlock.Hash
-	newBlock.Hash = CalculateHash(newBlock)
-
-	return newBlock, nil
+// AddBlock 向链中加入一个新块
+// data 在实际中就是交易
+func (bc *BlockChain) AddBlock(data string) {
+	prevBlock := bc.Blocks[len(bc.Blocks)-1]
+	newBlock := NewBlock(prevBlock.index, data, prevBlock.Hash)
+	bc.Blocks = append(bc.Blocks, newBlock)
 }
 
-func IsBlockValid(newBlock, oldBlock Block) bool {
-	if oldBlock.Index+1 != newBlock.Index {
-		return false
-	}
-	if oldBlock.Hash != newBlock.PrevHash {
-		return false
-	}
-	if CalculateHash(newBlock) != newBlock.Hash {
-		return false
-	}
-	return true
-}
 
-func ReplaceChain(newBlocks []Block) {
-	if len(newBlocks) > len(Bc.Blocks) {
-		Bc.Blocks = newBlocks
-	}
-}
-
-func GetBlockInfo() []Block{
-	return Bc.Blocks
+func Start(){
+	Bc=NewBlockChain()
+	go func() {
+		i:=1
+		for ; ;  {
+			Bc.AddBlock(string(i))
+			i++
+			time.Sleep(time.Second)
+		}
+	}()
 }
